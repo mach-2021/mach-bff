@@ -4,7 +4,8 @@ import com.mach.bff.customer.mapper.CustomerMapper;
 import com.mach.bff.customer.repository.CustomerRepository;
 import com.mach.core.exception.BadRequestException;
 import com.mach.core.exception.UnprocessableEntityException;
-import com.mach.core.model.customer.request.CreateCustomerRequest;
+import com.mach.core.model.customer.request.CustomerCreateRequest;
+import com.mach.core.model.customer.request.CustomerLoginRequest;
 import com.mach.core.model.customer.response.CustomerLoginResponse;
 import io.sphere.sdk.customers.CustomerDraft;
 import io.sphere.sdk.customers.CustomerSignInResult;
@@ -20,8 +21,8 @@ public class CustomerService {
     private final CustomerRepository customerRepository;
     private final CustomerMapper customerMapper;
 
-    public CustomerLoginResponse createCustomer(CreateCustomerRequest customerRequest) {
-        if (StringUtils.isAnyBlank(customerRequest.getName(), customerRequest.getPassword())) {
+    public CustomerLoginResponse createCustomer(CustomerCreateRequest customerRequest) {
+        if (StringUtils.isAnyBlank(customerRequest.getEmail(), customerRequest.getPassword())) {
             throw new BadRequestException("Name or password empty", "registration_empty_fields");
         }
         log.info("Start create customer");
@@ -30,6 +31,19 @@ public class CustomerService {
         if (signInResult.getCustomer() == null) {
             log.error("Can not create customer. Sign in result is empty");
             throw new UnprocessableEntityException("Can not create customer", "registration_failed");
+        }
+        return customerMapper.mapCustomerToResponse(signInResult.getCustomer());
+    }
+
+    public CustomerLoginResponse loginCustomer(CustomerLoginRequest customerRequest) {
+        if (StringUtils.isAnyBlank(customerRequest.getEmail(), customerRequest.getPassword())) {
+            throw new BadRequestException("Name or password empty", "registration_empty_fields");
+        }
+        log.info("Start create customer");
+        CustomerSignInResult signInResult = customerRepository.loginCustomer(customerRequest).toCompletableFuture().join();
+        if (signInResult.getCustomer() == null) {
+            log.error("Can not login customer. Invalid credentials");
+            throw new UnprocessableEntityException("Can not login customer", "login_invalid_credentials");
         }
         return customerMapper.mapCustomerToResponse(signInResult.getCustomer());
     }

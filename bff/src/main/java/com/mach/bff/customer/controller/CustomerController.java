@@ -1,7 +1,8 @@
 package com.mach.bff.customer.controller;
 
 import com.mach.bff.customer.service.CustomerService;
-import com.mach.core.model.customer.request.CreateCustomerRequest;
+import com.mach.core.model.customer.request.CustomerCreateRequest;
+import com.mach.core.model.customer.request.CustomerLoginRequest;
 import com.mach.core.model.customer.response.CustomerLoginResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,8 +19,13 @@ public class CustomerController {
     private final CustomerService customerService;
 
     @PostMapping
-    public ResponseEntity<CustomerLoginResponse> createCustomer(@RequestBody CreateCustomerRequest customerRequest) {
+    public ResponseEntity<CustomerLoginResponse> createCustomer(@RequestBody CustomerCreateRequest customerRequest) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(customerService.createCustomer(customerRequest));
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<CustomerLoginResponse> loginCustomer(@RequestBody CustomerLoginRequest customerRequest) {
+        return ResponseEntity.ok(customerService.loginCustomer(customerRequest));
     }
 }

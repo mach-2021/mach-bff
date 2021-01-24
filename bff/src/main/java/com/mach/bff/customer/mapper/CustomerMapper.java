@@ -1,6 +1,6 @@
 package com.mach.bff.customer.mapper;
 
-import com.mach.core.model.customer.request.CreateCustomerRequest;
+import com.mach.core.model.customer.request.CustomerCreateRequest;
 import com.mach.core.model.customer.response.CustomerLoginResponse;
 import io.sphere.sdk.customers.Customer;
 import io.sphere.sdk.customers.CustomerDraft;
@@ -12,11 +12,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class CustomerMapper {
 
-    public CustomerDraft mapToCustomerDraft(CreateCustomerRequest customerRequest) {
+    public CustomerDraft mapToCustomerDraft(CustomerCreateRequest customerRequest) {
         final String email = RandomStringUtils.randomAlphabetic(12);
-        return CustomerDraftBuilder.of(email, customerRequest.getPassword())
+        return CustomerDraftBuilder.of(customerRequest.getEmail(), customerRequest.getPassword())
                 .firstName(customerRequest.getName())
-                .custom(CustomFieldsDraftBuilder.ofTypeKey("")
+                .custom(CustomFieldsDraftBuilder.ofTypeKey("customerType")
                         .build())
                 .build();
     }
