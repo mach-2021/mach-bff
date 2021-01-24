@@ -25,7 +25,7 @@ spec:
       terminationGracePeriodSeconds: 30
       containers:
         - name: bff
-          image: gcr.io/poetic-now-263312/bff:2021.01.24.5.main
+          image: gcr.io/poetic-now-263312/bff:2021.01.24.6.main
           command: [ "java",
                      "-XX:MaxRAMPercentage=60", "-XX:+AlwaysActAsServerClassMachine",
                      "-jar", "app.jar" ]
