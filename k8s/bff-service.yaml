@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: bff
+  labels:
+    app: bff
+  annotations:
+    cloud.google.com/load-balancer-type: Internal
+    beta.cloud.google.com/backend-config: '{"ports": {"80":"bff-timeout"}}'
+spec:
+  selector:
+    app: bff
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 8084
+  type: LoadBalancer

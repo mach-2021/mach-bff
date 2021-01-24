@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bff
+  labels:
+    app: bff
+spec:
+  replicas: 1
+  minReadySeconds: 30
+  progressDeadlineSeconds: 420
+  selector:
+    matchLabels:
+      app: bff
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: bff
+    spec:
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      containers:
+        - name: bff
+          image: gcr.io/poetic-now-263312/bff:2021.01.24.12.main
+          command: [ "java",
+                     "-XX:MaxRAMPercentage=60", "-XX:+AlwaysActAsServerClassMachine",
+                     "-jar", "app.jar" ]
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8082
+          resources:
+            limits:
+              memory: "1Gi"
+              cpu: "750m"
+            requests:
+              memory: "100M"
+              cpu: "250m"
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8084
+            failureThreshold: 20
+            initialDelaySeconds: 170
+            periodSeconds: 5
+            timeoutSeconds: 1
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8084
+            failureThreshold: 3
+            initialDelaySeconds: 170
+            periodSeconds: 60
+            timeoutSeconds: 2
+          env:
+            - name: "DD_SERVICE_NAME"
+              value: subscriptions
+            - name: "DD_ENV"
+              value: poetic-now-263312
+            - name: "DD_AGENT_HOST"
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: status.hostIP

@@ -1,0 +1,3 @@
+rootProject.name = 'mach-bff'
+include 'bff'
+include 'core'
