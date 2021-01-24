@@ -10,4 +10,3 @@ RUN adduser -D appuser
 USER appuser
 WORKDIR /home/appuser
 COPY --from=builder --chown=101:101 /home/gradle/project/bff/build/libs/*.jar /home/appuser/app.jar
-COPY --from=builder --chown=101:101 /home/gradle/project/bff/src/main/resources/first.json /home/appuser/bff/src/main/resources/first.json

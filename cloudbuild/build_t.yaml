@@ -1,7 +1,7 @@
 steps:
   - name: gcr.io/cloud-builders/gcloud
     entrypoint: 'bash'
-    args: [ '-c', 'gcloud secrets versions access latest --secret=bff-secret > /root/.ssh/bff' ]
+    args: [ '-c', 'gcloud secrets versions access latest --secret=bff_key > /root/.ssh/bff_key' ]
     volumes:
       - name: 'ssh'
         path: /root/.ssh
@@ -12,10 +12,10 @@ steps:
     args:
       - '-c'
       - |
-        chmod 600 /root/.ssh/bff
+        chmod 600 /root/.ssh/bff_key
         cat <<EOF >/root/.ssh/config
         Hostname github.com
-        IdentityFile /root/.ssh/bff
+        IdentityFile /root/.ssh/bff_key
         EOF
         ssh-keyscan -t rsa github.com > /root/.ssh/known_hosts
     volumes:

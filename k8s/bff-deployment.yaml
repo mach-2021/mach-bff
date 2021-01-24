@@ -25,7 +25,7 @@ spec:
       terminationGracePeriodSeconds: 30
       containers:
         - name: bff
-          image: gcr.io/poetic-now-263312/bff:2021.01.24.6.main
+          image: gcr.io/mach-2021/bff:2021.01.24.6.main
           command: [ "java",
                      "-XX:MaxRAMPercentage=60", "-XX:+AlwaysActAsServerClassMachine",
                      "-jar", "app.jar" ]
@@ -65,3 +65,16 @@ spec:
                 fieldRef:
                   apiVersion: v1
                   fieldPath: status.hostIP
+            - name: SPRING_CLOUD_GCP_CREDENTIAL_PATH
+              valueFrom:
+                configMapKeyRef:
+                  name: config-map
+                  key: springCloudGcpCredentialPath
+          volumeMounts:
+            - name: gcp-service-account-key
+              mountPath: "/etc/keys"
+              readOnly: true
+      volumes:
+        - name: gcp-service-account-key
+          secret:
+            secretName: gcp-service-account
