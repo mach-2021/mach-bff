@@ -70,6 +70,16 @@ spec:
                 configMapKeyRef:
                   name: config-map
                   key: springCloudGcpCredentialPath
+            - name: ALGOLIA_ADMIN_API_KEY
+              valueFrom:
+                configMapKeyRef:
+                  name: config-map
+                  key: algoliaApiKey
+            - name: ALGOLIA_APPLICATION_ID
+              valueFrom:
+                configMapKeyRef:
+                  name: config-map
+                  key: algoliaApplicationId
           volumeMounts:
             - name: gcp-service-account-key
               mountPath: "/etc/keys"

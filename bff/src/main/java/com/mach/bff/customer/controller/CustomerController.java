@@ -4,9 +4,12 @@ import com.mach.bff.customer.service.CustomerService;
 import com.mach.core.model.customer.request.CustomerCreateRequest;
 import com.mach.core.model.customer.request.CustomerLoginRequest;
 import com.mach.core.model.customer.response.CustomerLoginResponse;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,5 +30,11 @@ public class CustomerController {
     @PostMapping("/login")
     public ResponseEntity<CustomerLoginResponse> loginCustomer(@RequestBody CustomerLoginRequest customerRequest) {
         return ResponseEntity.ok(customerService.loginCustomer(customerRequest));
+    }
+
+    @GetMapping("/{email}/available")
+    public ResponseEntity<Void> isEmailAvailable(@PathVariable final String email) {
+        customerService.isEmailAvailable(email);
+        return ResponseEntity.ok().build();
     }
 }

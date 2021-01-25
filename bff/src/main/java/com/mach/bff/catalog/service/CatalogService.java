@@ -41,4 +41,15 @@ public class CatalogService {
         log.info("Find categories {}", categories.size());
         return catalogMapper.mapCategoriesToCategoryResponse(categories);
     }
+
+    public CategoryResponse<CategoryModel> getRootCategories() {
+        List<Category> categories = catalogRepository.getRootCategories()
+                .toCompletableFuture().join().getResults();
+        if (CollectionUtils.isEmpty(categories)) {
+            log.error("Categories do not exist in project");
+            return new CategoryResponse<>(List.of());
+        }
+        log.info("Find categories {}", categories.size());
+        return catalogMapper.mapCategoriesToCategoryResponse(categories);
+    }
 }

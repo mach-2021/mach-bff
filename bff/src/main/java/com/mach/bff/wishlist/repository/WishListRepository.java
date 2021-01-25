@@ -46,7 +46,7 @@ public class WishListRepository {
                         .build();
         return repository.executeWithThrowing(ShoppingListCreateCommand.of(shoppingListDraft)
                 .plusExpansionPaths(ShoppingListExpansionModel::customer)
-                .plusExpansionPaths(ShoppingListExpansionModel::lineItems));
+                .plusExpansionPaths(sh -> sh.lineItems().variant()));
     }
 
     public CompletionStage<PagedQueryResult<ShoppingList>> findCustomerWishList(String customerId) {
@@ -54,7 +54,7 @@ public class WishListRepository {
                 .plusPredicates(shoppingList -> shoppingList.customer().id().is(customerId))
                 .plusPredicates(shoppingList -> shoppingList.custom().fields().ofEnum(LIST_TYPE_FIELD).key().is(LIST_FAVOURITE_TYPE))
                 .plusExpansionPaths(ShoppingListExpansionModel::customer)
-                .plusExpansionPaths(ShoppingListExpansionModel::lineItems));
+                .plusExpansionPaths(sh -> sh.lineItems().variant()));
     }
 
     public void createCustomType() {
@@ -70,6 +70,6 @@ public class WishListRepository {
     public CompletionStage<ShoppingList> updateWishList(ShoppingList shoppingList, UpdateAction<ShoppingList> action) {
         return repository.executeWithThrowing(ShoppingListUpdateCommand.of(shoppingList, action)
                 .plusExpansionPaths(ShoppingListExpansionModel::customer)
-                .plusExpansionPaths(ShoppingListExpansionModel::lineItems));
+                .plusExpansionPaths(sh -> sh.lineItems().variant()));
     }
 }

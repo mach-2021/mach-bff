@@ -11,6 +11,8 @@ buildscript {
         algolia_version = "3.12.1"
         spring_cloud_gcp_version = "1.2.5.RELEASE"
         swagger_version = "2.9.2"
+        jwt_version = "0.9.1"
+        jaxws_version = "2.3.1"
     }
 
     repositories {
@@ -40,6 +42,10 @@ dependencies {
     implementation "org.springframework.boot:spring-boot-starter-validation:$spring_boot_version"
     implementation "org.springframework.cloud:spring-cloud-gcp-starter-pubsub:$spring_cloud_gcp_version"
     implementation "org.springframework.boot:spring-boot-starter-actuator:$spring_boot_version"
+    implementation "org.springframework.boot:spring-boot-starter-security:$spring_boot_version"
+
+    implementation "io.jsonwebtoken:jjwt:$jwt_version"
+    implementation "javax.xml.ws:jaxws-api:$jaxws_version"
 
     implementation "com.commercetools.sdk.jvm.core:commercetools-models:$commercetools_version"
     implementation "com.commercetools.sdk.jvm.core:commercetools-java-client-ahc-2_5:$commercetools_version"

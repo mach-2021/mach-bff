@@ -21,4 +21,11 @@ public class CatalogRepository {
                 .plusExpansionPaths(CategoryExpansionModel::ancestors)
                 .withLimit(500));
     }
+
+    public CompletionStage<PagedQueryResult<Category>> getRootCategories() {
+        return repository.executeWithThrowing(CategoryQuery.of().byIsRoot()
+                .plusExpansionPaths(CategoryExpansionModel::parent)
+                .plusExpansionPaths(CategoryExpansionModel::ancestors)
+                .withLimit(500));
+    }
 }

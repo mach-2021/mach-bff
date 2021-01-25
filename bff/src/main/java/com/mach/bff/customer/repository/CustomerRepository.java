@@ -2,11 +2,14 @@ package com.mach.bff.customer.repository;
 
 import com.mach.commercetools.repository.BaseRepository;
 import com.mach.core.model.customer.request.CustomerLoginRequest;
+import io.sphere.sdk.customers.Customer;
 import io.sphere.sdk.customers.CustomerDraft;
 import io.sphere.sdk.customers.CustomerSignInResult;
 import io.sphere.sdk.customers.commands.CustomerCreateCommand;
 import io.sphere.sdk.customers.commands.CustomerSignInCommand;
+import io.sphere.sdk.customers.queries.CustomerQuery;
 import io.sphere.sdk.models.LocalizedString;
+import io.sphere.sdk.queries.PagedQueryResult;
 import io.sphere.sdk.types.FieldDefinition;
 import io.sphere.sdk.types.ReferenceFieldType;
 import io.sphere.sdk.types.SetFieldType;
@@ -42,5 +45,11 @@ public class CustomerRepository {
         final Type join = repository.executeWithThrowing(TypeCreateCommand.of(typeDraft))
                 .toCompletableFuture().join();
         System.out.println("Create type");
+    }
+
+    public CompletionStage<PagedQueryResult<Customer>> findCustomersByEmail(String email) {
+        return repository.executeWithThrowing(CustomerQuery.of()
+                .withPredicates(customer -> customer.email().is(email))
+                .withLimit(1));
     }
 }
