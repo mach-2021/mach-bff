@@ -22,13 +22,13 @@ public class WishListController {
         return ResponseEntity.ok(wishListService.findCustomerWishList());
     }
 
-    @PutMapping("/skus/{sku}")
-    public ResponseEntity<WishListResponse> addProductToShoppingList(@PathVariable("sku") String sku) {
-        return ResponseEntity.ok(wishListService.addProductToWishList(sku));
+    @PutMapping("/products/{productId}")
+    public ResponseEntity<WishListResponse> addProductToShoppingList(@PathVariable("productId") String productId) {
+        return ResponseEntity.ok(wishListService.addProductToWishList(productId));
     }
 
-    @DeleteMapping("/skus/{sku}")
-    public ResponseEntity<WishListResponse> removeProductFromShoppingList(@PathVariable("sku") String sku) {
-        return ResponseEntity.ok(wishListService.removeProductFromWishList(sku));
+    @DeleteMapping("/products/{productId}")
+    public ResponseEntity<WishListResponse> removeProductFromShoppingList(@PathVariable("productId") String productId) {
+        return ResponseEntity.ok(wishListService.removeProductFromWishList(productId));
     }
 }

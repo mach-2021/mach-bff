@@ -4,8 +4,6 @@ metadata:
   name: bff
   labels:
     app: bff
-  annotations:
-    beta.cloud.google.com/backend-config: '{"ports": {"80":"bff-timeout"}}'
 spec:
   selector:
     app: bff
