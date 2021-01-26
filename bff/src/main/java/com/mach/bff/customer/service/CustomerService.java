@@ -39,12 +39,20 @@ public class CustomerService {
         log.info("Start create customer");
         final CustomerDraft customerDraft = customerMapper.mapToCustomerDraft(customerRequest);
         CustomerSignInResult signInResult = customerRepository.createCustomer(customerDraft).toCompletableFuture().join();
-        if (signInResult.getCustomer() == null) {
+        final Customer customer = signInResult.getCustomer();
+        if (customer == null) {
             log.error("Can not create customer. Sign in result is empty");
             throw new UnprocessableEntityException("Can not create customer", "registration_failed");
         }
         wishListService.createCustomerWishList(signInResult.getCustomer().getId());
-        return customerMapper.mapCustomerToResponse(signInResult.getCustomer());
+        final UserPrincipal userPrincipal = UserPrincipal.builder()
+                .name(customer.getFirstName())
+                .email(customer.getEmail())
+                .internalId(customer.getId())
+                .authorities(List.of(CUSTOMER.authority()))
+                .build();
+        SecurityUtils.setUserPrincipal(userPrincipal);
+        return customerMapper.mapCustomerToResponse(customer);
     }
 
     public void isEmailAvailable(final String email) {
